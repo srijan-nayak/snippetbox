@@ -22,7 +22,7 @@ type UserModel struct {
 }
 
 func (m *UserModel) Insert(name, email, password string) error {
-	hasedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
 		return err
 	}
@@ -32,7 +32,7 @@ func (m *UserModel) Insert(name, email, password string) error {
 		VALUES (?, ?, ?, UTC_TIMESTAMP())
 	`
 
-	_, err = m.DB.Exec(stmt, name, email, string(hasedPassword))
+	_, err = m.DB.Exec(stmt, name, email, string(hashedPassword))
 	if err != nil {
 		var mySQLError *mysql.MySQLError
 		if errors.As(err, &mySQLError) {
